@@ -1,0 +1,8 @@
+.idea/
+.vscode/
+*.pyc
+__pycache__/
+output/
+tmp/
+.venv/
+models/

@@ -1,0 +1,11 @@
+[project]
+name = "FACTS"
+version = "0.1.0"
+description = "FACTS project"
+requires-python = ">=3.12"
+
+[tool.uv]
+# Configuration for uv, the Python package installer and resolver.
+#
+# For a full list of options, see the uv documentation:
+# https://docs.astral.sh/uv/configuration/
