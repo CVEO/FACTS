@@ -10,7 +10,7 @@ class TextureImage:
     def __init__(self, path: str):
         self.img_path: str = path
         self.img_data: Image.Image = None
-        self.tmp_data = None # Can store intermediate data, e.g., numpy arrays
+        self.tmp_data = None  # Can store intermediate data, e.g., numpy arrays
         self.brightness = None
         self.name = os.path.basename(path)
         self.building_obj = None
@@ -35,7 +35,7 @@ class TextureImage:
             except Exception as e:
                 print(f"Error loading image {self.img_path}: {e}")
                 # Create a placeholder black image on failure
-                self.img_data = Image.new('RGB', (256, 256), color = 'black')
+                self.img_data = Image.new('RGB', (256, 256), color='black')
                 self.name = f"error_{self.name}"
 
     def update_image(self, new_image: Image.Image):
@@ -62,11 +62,11 @@ class TextureImage:
             image_to_save = self.img_data
         elif isinstance(data, np.ndarray):
             # Assuming data is a BGR numpy array from OpenCV, convert to RGB for saving
-            if data.ndim == 2: # Grayscale image
+            if data.ndim == 2:  # Grayscale image
                 image_to_save = Image.fromarray(data, mode='L')
             else:
                 image_to_save = Image.fromarray(cv.cvtColor(data, cv.COLOR_BGR2RGB))
-        
+
         if image_to_save:
             image_to_save.save(tmp_path)
 

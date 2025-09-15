@@ -22,6 +22,7 @@
 2.  Install GroundedSAM:
     ```sh
     .venv\Scripts\activate
+    mkdir -p modules
     cd modules
     git clone https://github.com/SoluteToNight/GroundedSam4FACT.git
     cd GroundedSam4FACT

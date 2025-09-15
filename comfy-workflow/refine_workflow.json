@@ -1,0 +1,1032 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "architectureUrbanSdlife_v60.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "2": {
+    "inputs": {
+      "image": ".png"
+    },
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "加载图像"
+    }
+  },
+  "3": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 2.5000000000000004,
+      "image": [
+        "2",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "缩放图像（像素）"
+    }
+  },
+  "7": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_softedge.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "加载ControlNet模型"
+    }
+  },
+  "8": {
+    "inputs": {
+      "safe": "enable",
+      "resolution": 1024,
+      "image": [
+        "3",
+        0
+      ]
+    },
+    "class_type": "HEDPreprocessor",
+    "_meta": {
+      "title": "HED Soft-Edge Lines"
+    }
+  },
+  "12": {
+    "inputs": {
+      "strength": 0.9000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.9000000000000002,
+      "positive": [
+        "15",
+        0
+      ],
+      "negative": [
+        "16",
+        0
+      ],
+      "control_net": [
+        "7",
+        0
+      ],
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "应用ControlNet（旧版高级）"
+    }
+  },
+  "13": {
+    "inputs": {
+      "clip_name": "model.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "14": {
+    "inputs": {
+      "stop_at_clip_layer": -3,
+      "clip": [
+        "13",
+        0
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "设置CLIP最后一层"
+    }
+  },
+  "15": {
+    "inputs": {
+      "text": "Enhance the building facade by straightening and aligning all structural lines to follow perfect horizontal and vertical axes, ensuring no distortions, warping, or misalignment in the wall and window structures. Redraw and refine the windows, ensuring they are standard rectangular shapes with sharp, clean edges and clear alignment along the coordinate axes. Adjust window textures to include reflective glass or subtle blinds, preserving uniformity in size, style, and spacing across the facade. Transform dark, irregular areas into properly aligned and realistic windows that match the original style and dimensions.\nRefine the wall texture to be smooth, uniform, and free of irregularities, such as stains, cracks, or white patches, while preserving the building's natural color and material consistency. Remove any text, advertisements, or obstructive elements on the wall to create a clean and cohesive surface. Ensure air conditioning units and other exterior details remain intact, sharp, and integrated into the design. Eliminate all shadows to create even, natural lighting across the entire facade.\n\nSmooth and refine the building facade by eliminating all wrinkles, folds, or irregularities in the wall texture. Ensure the wall surface appears clean, uniform, and naturally smooth, while maintaining the original material’s texture and color consistency. Retain and subtly adjust the original windows to ensure they remain standard rectangular shapes with perfectly straight, clean edges. Preserve all other exterior elements, such as air conditioning units, ensuring they are sharp and well-integrated into the improved facade. Remove all shadows and distortions to create a uniformly lit, cohesive, and polished appearance.\nEnsure that the overall color tone of the facade remains consistent with the original, preserving the natural hues and materials used in the building's design. Maintain the same lighting and color scheme throughout the facade to retain the authentic look and feel\nKeep and preserve the overall structure of the windows, but redrawing any distorted or warped sections to ensure they are straight, symmetrical, and aligned properly. Ensure the windows maintain their original size and style, with clear, sharp edges, but remove any distortions or irregularities. Focus on refining the shape and ensuring that all windows are properly aligned with the building’s structural lines.\nKeep the overall color of the building facade consistent, ensuring that the large areas of the walls and structural colors remain unchanged.\nKeep the overall color of the building facade consistent, ensuring that the large areas of the walls and structural colors remain unchanged. Adjust the brightness and luminance across the image to ensure uniformity, so that all areas of the facade have a consistent and balanced lighting effect. Only focus on refining the finer details such as windows, air conditioning units, and small imperfections, while ensuring the brightness remains consistent throughout. Maintain the original hue and tone across the large surfaces, making sure the overall color scheme stays intact while improving the sharpness and cleanliness of individual elements.\nRemove any irregular green patches, such as tree foliage or other unwanted greenery, and restore these areas to a smooth, uniform wall surface.\n",
+      "clip": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "16": {
+    "inputs": {
+      "text": "blurry, distorted windows, low quality, curved lines, non-rectangular windows, heavy window grids or bars, unrealistic appearance, black spots on the wall, irregular shapes, stains, blotches, chaotic patterns, uneven color distribution, wall damage, or cracks",
+      "clip": [
+        "14",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "18": {
+    "inputs": {
+      "pixels": [
+        "3",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE编码"
+    }
+  },
+  "20": {
+    "inputs": {
+      "seed": 339943654427252,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "denoise": 0.3600000000000001,
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "12",
+        0
+      ],
+      "negative": [
+        "12",
+        1
+      ],
+      "latent_image": [
+        "18",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "21": {
+    "inputs": {
+      "samples": [
+        "20",
+        0
+      ],
+      "vae": [
+        "1",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "24": {
+    "inputs": {
+      "filename_prefix": "Firstedition",
+      "images": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "25": {
+    "inputs": {
+      "filename_prefix": "FIrstLinear",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "32": {
+    "inputs": {
+      "clip_name": "model.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "33": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_softedge.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "加载ControlNet模型"
+    }
+  },
+  "34": {
+    "inputs": {
+      "ckpt_name": "architectureUrbanSdlife_v60.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "35": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": [
+        "32",
+        0
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "设置CLIP最后一层"
+    }
+  },
+  "36": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 2.5000000000000004,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "缩放图像（像素）"
+    }
+  },
+  "37": {
+    "inputs": {
+      "text": "Ultra-precise architectural facade blueprint, (straightened lines:1.3), (perfect 90-degree angles:1.2), (mathematically aligned grid patterns), (crisp vector-style linework), (industrial-grade precision), (uniform window rectangles:1.1), (flawless horizontal/vertical alignment), (sharp edges:1.2), (CAD-quality drafting), (geometric perfection), (zero distortion), (symmetrical patterns), (clean technical drawing), (anodized aluminum texture), (glass panel reflections), (parametric design style)",
+      "clip": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "38": {
+    "inputs": {
+      "text": "curved lines, unrealistic appearance, irregular shapes, stains, blotches, chaotic patterns",
+      "clip": [
+        "35",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "39": {
+    "inputs": {
+      "pixels": [
+        "36",
+        0
+      ],
+      "vae": [
+        "34",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE编码"
+    }
+  },
+  "40": {
+    "inputs": {
+      "safe": "disable",
+      "resolution": 704,
+      "image": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "PiDiNetPreprocessor",
+    "_meta": {
+      "title": "PiDiNet Soft-Edge Lines"
+    }
+  },
+  "41": {
+    "inputs": {
+      "strength": 0.9000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.9000000000000002,
+      "positive": [
+        "37",
+        0
+      ],
+      "negative": [
+        "38",
+        0
+      ],
+      "control_net": [
+        "33",
+        0
+      ],
+      "image": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "应用ControlNet（旧版高级）"
+    }
+  },
+  "42": {
+    "inputs": {
+      "images": [
+        "40",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "43": {
+    "inputs": {
+      "seed": 185510795849506,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "denoise": 0.39000000000000007,
+      "model": [
+        "34",
+        0
+      ],
+      "positive": [
+        "41",
+        0
+      ],
+      "negative": [
+        "41",
+        1
+      ],
+      "latent_image": [
+        "39",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "44": {
+    "inputs": {
+      "samples": [
+        "43",
+        0
+      ],
+      "vae": [
+        "34",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "48": {
+    "inputs": {
+      "clip_name": "model.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "49": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_softedge.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "加载ControlNet模型"
+    }
+  },
+  "50": {
+    "inputs": {
+      "ckpt_name": "architectureUrbanSdlife_v60.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "51": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": [
+        "48",
+        0
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "设置CLIP最后一层"
+    }
+  },
+  "53": {
+    "inputs": {
+      "text": "Ultra-precise architectural facade blueprint, (straightened lines:1.3), (perfect 90-degree angles:1.2), (mathematically aligned grid patterns), (crisp vector-style linework), (industrial-grade precision), (uniform window rectangles:1.1), (flawless horizontal/vertical alignment), (sharp edges:1.2), (CAD-quality drafting), (geometric perfection), (zero distortion), (symmetrical patterns), (clean technical drawing), (anodized aluminum texture), (glass panel reflections), (parametric design style)",
+      "clip": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "54": {
+    "inputs": {
+      "text": "(crooked lines:1.3), (warped surfaces), (uneven edges), (hand-drawn sketch), (organic shapes), (blurry textures), (curved windows), (perspective distortion), (rustic style), (aged materials), (watercolor effect), (brush strokes), (deformed geometry), (asymmetrical elements), (freehand patterns)",
+      "clip": [
+        "51",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "55": {
+    "inputs": {
+      "pixels": [
+        "44",
+        0
+      ],
+      "vae": [
+        "50",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE编码"
+    }
+  },
+  "56": {
+    "inputs": {
+      "safe": "disable",
+      "resolution": 704,
+      "image": [
+        "44",
+        0
+      ]
+    },
+    "class_type": "PiDiNetPreprocessor",
+    "_meta": {
+      "title": "PiDiNet Soft-Edge Lines"
+    }
+  },
+  "57": {
+    "inputs": {
+      "strength": 0.9000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.9000000000000002,
+      "positive": [
+        "53",
+        0
+      ],
+      "negative": [
+        "54",
+        0
+      ],
+      "control_net": [
+        "49",
+        0
+      ],
+      "image": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "应用ControlNet（旧版高级）"
+    }
+  },
+  "58": {
+    "inputs": {
+      "images": [
+        "56",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "59": {
+    "inputs": {
+      "seed": 967490569587326,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "denoise": 0.38000000000000006,
+      "model": [
+        "50",
+        0
+      ],
+      "positive": [
+        "57",
+        0
+      ],
+      "negative": [
+        "57",
+        1
+      ],
+      "latent_image": [
+        "55",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "60": {
+    "inputs": {
+      "samples": [
+        "59",
+        0
+      ],
+      "vae": [
+        "50",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "63": {
+    "inputs": {
+      "clip_name": "model.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "64": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_softedge.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "加载ControlNet模型"
+    }
+  },
+  "65": {
+    "inputs": {
+      "pixels": [
+        "21",
+        0
+      ],
+      "vae": [
+        "66",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE编码"
+    }
+  },
+  "66": {
+    "inputs": {
+      "ckpt_name": "architectureUrbanSdlife_v60.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "67": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": [
+        "63",
+        0
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "设置CLIP最后一层"
+    }
+  },
+  "68": {
+    "inputs": {
+      "strength": 0.9000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.9000000000000002,
+      "positive": [
+        "74",
+        0
+      ],
+      "negative": [
+        "73",
+        0
+      ],
+      "control_net": [
+        "64",
+        0
+      ],
+      "image": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "应用ControlNet（旧版高级）"
+    }
+  },
+  "69": {
+    "inputs": {
+      "samples": [
+        "75",
+        0
+      ],
+      "vae": [
+        "66",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "70": {
+    "inputs": {
+      "filename_prefix": "Repeatedition",
+      "images": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "71": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 2.5000000000000004,
+      "image": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "缩放图像（像素）"
+    }
+  },
+  "73": {
+    "inputs": {
+      "text": "Blurry, distorted windows, low quality, curved lines, non-rectangular windows, heavy window grids or bars, unrealistic appearance, black spots on the wall, irregular shapes, stains, blotches, chaotic patterns, uneven color distribution, wall damage, cracks, shadows, reflections, unnatural lighting, uneven lighting, distorted textures, visible text or advertisements, obstructive elements, 3D effects, depth effects, perspective distortions",
+      "clip": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "74": {
+    "inputs": {
+      "text": "Enhance the building facade by straightening and aligning all structural lines to follow perfect horizontal and vertical axes, ensuring no distortions, warping, or misalignment in the wall and window structures. Redraw and refine the windows, ensuring they are standard rectangular shapes with sharp, clean edges and clear alignment along the coordinate axes. Adjust window textures to include reflective glass or subtle blinds, preserving uniformity in size, style, and spacing across the facade. Transform dark, irregular areas into properly aligned and realistic windows that match the original style and dimensions.\nRefine the wall texture to be smooth, uniform, and free of irregularities, such as stains, cracks, or white patches, while preserving the building's natural color and material consistency. Remove any text, advertisements, or obstructive elements on the wall to create a clean and cohesive surface. Ensure air conditioning units and other exterior details remain intact, sharp, and integrated into the design. Eliminate all shadows to create even, natural lighting across the entire facade.\n\nSmooth and refine the building facade by eliminating all wrinkles, folds, or irregularities in the wall texture. Ensure the wall surface appears clean, uniform, and naturally smooth, while maintaining the original material’s texture and color consistency. Retain and subtly adjust the original windows to ensure they remain standard rectangular shapes with perfectly straight, clean edges. Preserve all other exterior elements, such as air conditioning units, ensuring they are sharp and well-integrated into the improved facade. Remove all shadows and distortions to create a uniformly lit, cohesive, and polished appearance.\nPreserve the Chinese characters on the wall exactly as they appear, ensuring they are not altered, removed, or distorted. Maintain the integrity of the text, keeping it sharp and clear, with no changes to the size, style, or position of the characters. Only refine the surrounding structure, such as the wall texture, windows, and architectural details, while ensuring the Chinese text remains intact and unmodified.\n",
+      "clip": [
+        "67",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "75": {
+    "inputs": {
+      "seed": 699693261471285,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "denoise": 0.2700000000000001,
+      "model": [
+        "66",
+        0
+      ],
+      "positive": [
+        "68",
+        0
+      ],
+      "negative": [
+        "68",
+        1
+      ],
+      "latent_image": [
+        "65",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "77": {
+    "inputs": {
+      "clip_name": "model.safetensors",
+      "type": "stable_diffusion",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "78": {
+    "inputs": {
+      "control_net_name": "control_v11p_sd15_softedge.pth"
+    },
+    "class_type": "ControlNetLoader",
+    "_meta": {
+      "title": "加载ControlNet模型"
+    }
+  },
+  "79": {
+    "inputs": {
+      "pixels": [
+        "69",
+        0
+      ],
+      "vae": [
+        "80",
+        2
+      ]
+    },
+    "class_type": "VAEEncode",
+    "_meta": {
+      "title": "VAE编码"
+    }
+  },
+  "80": {
+    "inputs": {
+      "ckpt_name": "architectureUrbanSdlife_v60.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "81": {
+    "inputs": {
+      "stop_at_clip_layer": -2,
+      "clip": [
+        "77",
+        0
+      ]
+    },
+    "class_type": "CLIPSetLastLayer",
+    "_meta": {
+      "title": "设置CLIP最后一层"
+    }
+  },
+  "82": {
+    "inputs": {
+      "strength": 0.9000000000000001,
+      "start_percent": 0,
+      "end_percent": 0.9000000000000002,
+      "positive": [
+        "88",
+        0
+      ],
+      "negative": [
+        "87",
+        0
+      ],
+      "control_net": [
+        "78",
+        0
+      ],
+      "image": [
+        "60",
+        0
+      ]
+    },
+    "class_type": "ControlNetApplyAdvanced",
+    "_meta": {
+      "title": "应用ControlNet（旧版高级）"
+    }
+  },
+  "83": {
+    "inputs": {
+      "samples": [
+        "89",
+        0
+      ],
+      "vae": [
+        "80",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "84": {
+    "inputs": {
+      "filename_prefix": "Repeatedition",
+      "images": [
+        "83",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "85": {
+    "inputs": {
+      "upscale_method": "lanczos",
+      "megapixels": 2.5000000000000004,
+      "image": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "ImageScaleToTotalPixels",
+    "_meta": {
+      "title": "缩放图像（像素）"
+    }
+  },
+  "87": {
+    "inputs": {
+      "text": "Blurry, distorted windows, low quality, curved lines, non-rectangular windows, heavy window grids or bars, unrealistic appearance, black spots on the wall, irregular shapes, stains, blotches, chaotic patterns, uneven color distribution, wall damage, cracks, shadows, reflections, unnatural lighting, uneven lighting, distorted textures, visible text or advertisements, obstructive elements, 3D effects, depth effects, a perspective distortions",
+      "clip": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "88": {
+    "inputs": {
+      "text": "Enhance the building facade by straightening and aligning all structural lines to follow perfect horizontal and vertical axes, ensuring no distortions, warping, or misalignment in the wall and window structures. Redraw and refine the windows, ensuring they are standard rectangular shapes with sharp, clean edges and clear alignment along the coordinate axes. Adjust window textures to include reflective glass or subtle blinds, preserving uniformity in size, style, and spacing across the facade. Transform dark, irregular areas into properly aligned and realistic windows that match the original style and dimensions.\nRefine the wall texture to be smooth, uniform, and free of irregularities, such as stains, cracks, or white patches, while preserving the building's natural color and material consistency. Remove any text, advertisements, or obstructive elements on the wall to create a clean and cohesive surface. Ensure air conditioning units and other exterior details remain intact, sharp, and integrated into the design. Eliminate all shadows to create even, natural lighting across the entire facade.\n\nSmooth and refine the building facade by eliminating all wrinkles, folds, or irregularities in the wall texture. Ensure the wall surface appears clean, uniform, and naturally smooth, while maintaining the original material’s texture and color consistency. Retain and subtly adjust the original windows to ensure they remain standard rectangular shapes with perfectly straight, clean edges. Preserve all other exterior elements, such as air conditioning units, ensuring they are sharp and well-integrated into the improved facade. Remove all shadows and distortions to create a uniformly lit, cohesive, and polished appearance.\nPreserve the Chinese characters on the wall exactly as they appear, ensuring they are not altered, removed, or distorted. Maintain the integrity of the text, keeping it sharp and clear, with no changes to the size, style, or position of the characters. Only refine the surrounding structure, such as the wall texture, windows, and architectural details, while ensuring the Chinese text remains intact and unmodified.\n",
+      "clip": [
+        "81",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "CLIP文本编码"
+    }
+  },
+  "89": {
+    "inputs": {
+      "seed": 99758040552080,
+      "steps": 20,
+      "cfg": 8,
+      "sampler_name": "dpmpp_2m",
+      "scheduler": "normal",
+      "denoise": 0.30000000000000004,
+      "model": [
+        "80",
+        0
+      ],
+      "positive": [
+        "82",
+        0
+      ],
+      "negative": [
+        "82",
+        1
+      ],
+      "latent_image": [
+        "79",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "92": {
+    "inputs": {
+      "safe": "enable",
+      "resolution": 576,
+      "image": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "HEDPreprocessor",
+    "_meta": {
+      "title": "HED Soft-Edge Lines"
+    }
+  },
+  "93": {
+    "inputs": {
+      "images": [
+        "92",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "108": {
+    "inputs": {
+      "images": [
+        "83",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "109": {
+    "inputs": {
+      "images": [
+        "69",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  },
+  "111": {
+    "inputs": {
+      "images": [
+        "21",
+        0
+      ]
+    },
+    "class_type": "PreviewImage",
+    "_meta": {
+      "title": "预览图像"
+    }
+  }
+}

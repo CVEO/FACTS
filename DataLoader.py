@@ -1,11 +1,14 @@
 import os
 import shutil
-from img_class import TextureImage as timg
-from BuildingObj import BuildingObj
-from typing import *
 from datetime import datetime
+
 import cv2
+
+from BuildingObj import BuildingObj
+from img_class import TextureImage as timg
+
 temp_folder = "./tmp"
+
 
 # def load_dta(input_path: str = None, output_path: str = None):
 #     arg_list = []
@@ -78,7 +81,7 @@ temp_folder = "./tmp"
 #         raise ValueError("input_path is not an obj file")
 #     return load_building(arg_list)
 
-def is_filename(input_path:str = None):
+def is_filename(input_path: str = None):
     if not input_path:
         return False
     # 如果路径存在，直接返回是否为文件
@@ -93,13 +96,17 @@ def is_filename(input_path:str = None):
 
     # 无扩展名且文件名不为空时，可能是目录或文件（此处保守返回False）
     return bool(ext.strip())
+
+
 def load_building(arg_list):
-    for obj_path,mtl_path,temp_path,output_path in arg_list:
-        obj_path,mtl_path,temp_path,output_path = normalise_path(obj_path,mtl_path,temp_path,output_path)
-        yield BuildingObj(obj_path,mtl_path,temp_path,output_path)
+    for obj_path, mtl_path, temp_path, output_path in arg_list:
+        obj_path, mtl_path, temp_path, output_path = normalise_path(obj_path, mtl_path, temp_path, output_path)
+        yield BuildingObj(obj_path, mtl_path, temp_path, output_path)
+
+
 def is_image_file(file_path: str = None):
     try:
-        img = cv2.imread(file_path,cv2.IMREAD_UNCHANGED)
+        img = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)
         if img is not None:
             return True
     except Exception as e:
@@ -107,13 +114,13 @@ def is_image_file(file_path: str = None):
         return False
 
 
-def mtl_handel(mtl_path: str =None):
+def mtl_handel(mtl_path: str = None):
     mtl_path = os.path.abspath(mtl_path)
     print(mtl_path)
     dir_name = os.path.dirname(mtl_path)
     script_path = os.getcwd()
     os.chdir(dir_name)
-    new_file = open("new.tmp","a+",encoding='utf-8')
+    new_file = open("new.tmp", "a+", encoding='utf-8')
     with open(mtl_path, 'r', encoding='utf-8') as file:
         for line in file:
             if line.find("map_Kd") != -1:
@@ -126,17 +133,18 @@ def mtl_handel(mtl_path: str =None):
                         # 将绝对路径复制到同文件夹下
                         shutil.copy2(img_route)
                     # 改用相对路径
-                    line = "map_Kd"+" "+img_route
+                    line = "map_Kd" + " " + img_route
             new_file.write(line)
     new_file.close()
     if os.path.exists("backup_mtl.txt"):
         os.remove("backup_mtl.txt")
-    os.rename(os.path.basename(mtl_path),"backup_mtl.txt")
-    os.rename("new.tmp",os.path.basename(mtl_path))
+    os.rename(os.path.basename(mtl_path), "backup_mtl.txt")
+    os.rename("new.tmp", os.path.basename(mtl_path))
     os.chdir(script_path)
     return True
 
-def create_output_folder(input_path:str = None,output_path: str = None):
+
+def create_output_folder(input_path: str = None, output_path: str = None):
     folder_path = os.path.dirname(input_path)
     if is_filename(output_path):
         output_folder = os.path.dirname(output_path)
@@ -145,13 +153,15 @@ def create_output_folder(input_path:str = None,output_path: str = None):
     # print(output_folder)
     if os.path.exists(output_folder):
         shutil.rmtree(output_folder)
-    os.makedirs(output_folder,exist_ok=True)
-    shutil.copy2(input_path,output_path)
+    os.makedirs(output_folder, exist_ok=True)
+    shutil.copy2(input_path, output_path)
     with open(os.path.join(output_folder, "log.txt"), "w+") as f:
         f.write(f"Folder originate from {input_path}\n")
     return True
-def create_temp_folder(input_path: str = None,temp_path:str = None):
-    dirname,basename = os.path.split(temp_path)
+
+
+def create_temp_folder(input_path: str = None, temp_path: str = None):
+    dirname, basename = os.path.split(temp_path)
     if '.' in basename:
         temp_path = dirname
     # else:
@@ -159,10 +169,12 @@ def create_temp_folder(input_path: str = None,temp_path:str = None):
     if os.path.exists(temp_path):
         shutil.rmtree(temp_path)
     print(temp_path)
-    os.makedirs(temp_path,exist_ok=True)
-    shutil.copy2(input_path,temp_path)
+    os.makedirs(temp_path, exist_ok=True)
+    shutil.copy2(input_path, temp_path)
     return True
-def normalise_path(obj_path,mtl_path,temp_path,output_path):
+
+
+def normalise_path(obj_path, mtl_path, temp_path, output_path):
     # 将代码中的路径转换为绝对路径
     obj_path = os.path.normpath(obj_path)
     mtl_path = os.path.normpath(mtl_path)
@@ -179,9 +191,12 @@ def normalise_path(obj_path,mtl_path,temp_path,output_path):
     if is_filename(output_path):
         print("1111")
         output_path = os.path.dirname(output_path)
-    return obj_path,mtl_path,temp_path,output_path
-def pack_building_object(obj_path,mtl_path,temp_path,output_path):
+    return obj_path, mtl_path, temp_path, output_path
+
+
+def pack_building_object(obj_path, mtl_path, temp_path, output_path):
     yield BuildingObj(obj_path, mtl_path, temp_path, output_path)
+
 
 def collect_obj(input_path: str = None):
     obj_path_list = []
@@ -194,7 +209,9 @@ def collect_obj(input_path: str = None):
                 obj_path = os.path.join(dirpath, name)
                 obj_path_list.append(obj_path)
     return obj_path_list, has_subdirectories
-def load_data(input_path,output_path):
+
+
+def load_data(input_path, output_path):
     if not os.path.exists(input_path):
         raise ValueError("input_path is not exist")
     if os.path.isdir(input_path):
@@ -205,11 +222,11 @@ def load_data(input_path,output_path):
         #         if name.endswith(".obj"):
         #             obj_path = os.path.join(dirpath,name)
         #             obj_path_list.append(obj_path)
-        obj_path_list,has_sub_directories = collect_obj(input_path)
+        obj_path_list, has_sub_directories = collect_obj(input_path)
         print(obj_path_list)
-            # obj_path = [name for name in filenames if name.endswith(".obj")]
-            # obj_path = [os.path.join(dirpath,obj) for obj in obj_path]
-            # obj_path_list.append(obj_path)
+        # obj_path = [name for name in filenames if name.endswith(".obj")]
+        # obj_path = [os.path.join(dirpath,obj) for obj in obj_path]
+        # obj_path_list.append(obj_path)
         if not obj_path_list:
             print("No .obj files found, processing image files")
             image_files = []
@@ -249,17 +266,17 @@ def load_data(input_path,output_path):
             for obj_path in obj_path_list:
                 # rel_path = os.path.relpath(obj_path, input_path)
                 # output_obj_path = os.path.join(output_path, rel_path)
-                yield from load_data(obj_path,output_path)
+                yield from load_data(obj_path, output_path)
                 return
-        rel_input_path = [os.path.relpath(obj,input_path) for obj in obj_path_list]
+        rel_input_path = [os.path.relpath(obj, input_path) for obj in obj_path_list]
         # 生成在输出文件夹下的树状结构
-        output_path_list = [os.path.join(output_path,rel_path) for rel_path in rel_input_path]
+        output_path_list = [os.path.join(output_path, rel_path) for rel_path in rel_input_path]
         # 生成在缓存文件夹下的树状结构
-        temp_path_list = [os.path.join(temp_folder,rel_path) for rel_path in rel_input_path]
+        temp_path_list = [os.path.join(temp_folder, rel_path) for rel_path in rel_input_path]
         mtl_path_list = []
-        for obj,output,temp in zip(obj_path_list,output_path_list,temp_path_list):
+        for obj, output, temp in zip(obj_path_list, output_path_list, temp_path_list):
             folder = os.path.dirname(obj)
-            with open(obj,"r") as f:
+            with open(obj, "r") as f:
                 lines = f.readlines()
                 for line in lines:
                     if line.startswith("mtllib"):
@@ -270,16 +287,16 @@ def load_data(input_path,output_path):
             # 到底为什么会有换行符？？
             # mtl = mtl.replace("\n","")
             mtl_handel(mtl)
-            create_output_folder(obj,output)
-            create_temp_folder(obj,temp)
+            create_output_folder(obj, output)
+            create_temp_folder(obj, temp)
             # 复制mtl文件到输出文件夹和缓存文件夹
 
-            shutil.copy2(mtl,os.path.dirname(output))
-            shutil.copy2(mtl,os.path.dirname(temp))
+            shutil.copy2(mtl, os.path.dirname(output))
+            shutil.copy2(mtl, os.path.dirname(temp))
             mtl_path_list.append(mtl)
             # 打包obj模型
             # pack_building_object(obj,mtl,temp,output)
-        yield from load_building(zip(obj_path_list,mtl_path_list,temp_path_list,output_path_list))
+        yield from load_building(zip(obj_path_list, mtl_path_list, temp_path_list, output_path_list))
         return
     elif os.path.isfile(input_path):
         if input_path.endswith('.obj'):
@@ -297,7 +314,8 @@ def load_data(input_path,output_path):
             output = os.path.join(output_path, os.path.basename(input_folder))
             temp = os.path.join(temp_folder, os.path.basename(input_folder))
             mtl_handel(mtl)
-            print(f"obj_path is {obj}\n",f"mtl_path is {mtl}\n ",f"temp_path is {temp_folder}\n",f"output_path is {output_path}\n")
+            print(f"obj_path is {obj}\n", f"mtl_path is {mtl}\n ", f"temp_path is {temp_folder}\n",
+                  f"output_path is {output_path}\n")
             create_output_folder(obj, output)
             create_temp_folder(obj, temp)
             shutil.copy2(mtl, output)
@@ -311,9 +329,9 @@ def load_data(input_path,output_path):
             current_time = now.strftime("%Y-%m-%d")
             img_name = f"{now.strftime('%H%M%S')}.{img_format}"
             output_path = os.path.join(output_path, current_time)
-            os.makedirs(output_path,exist_ok=True)
+            os.makedirs(output_path, exist_ok=True)
             temp_path = os.path.join(temp_folder, current_time)
-            os.makedirs(temp_path,exist_ok=True)
+            os.makedirs(temp_path, exist_ok=True)
             empty_building_object = BuildingObj(None, None, temp_path, output_path)
             texture_image = timg(input_path)
             texture_image.building_obj = empty_building_object
@@ -322,4 +340,4 @@ def load_data(input_path,output_path):
             yield empty_building_object
             return
         else:
-            raise(ValueError("input path does not "))
+            raise (ValueError("input path does not "))

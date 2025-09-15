@@ -4,7 +4,7 @@ from img_class import TextureImage
 
 
 class BuildingObj:
-    def __init__(self, obj_path, mtl_path, temp_path,output_path):
+    def __init__(self, obj_path, mtl_path, temp_path, output_path):
         self.obj_path = obj_path
         self.mtl_path = mtl_path
         self.texture_list: list[TextureImage] = []
@@ -21,7 +21,7 @@ class BuildingObj:
         if self.mtl_path is None:
             print("No MTL file provided, skipping texture loading.")
             return
-        
+
         # Ensure the mtl path is absolute to resolve relative paths correctly.
         mtl_file_path = os.path.abspath(self.mtl_path)
         mtl_dir = os.path.dirname(mtl_file_path)
@@ -39,7 +39,7 @@ class BuildingObj:
                         texture_path = os.path.join(mtl_dir, relative_texture_path)
                         # Normalize the path to handle separators like \ or /
                         texture_path = os.path.normpath(texture_path)
-                        
+
                         print(f"Found texture: {texture_path}")
                         img = TextureImage(texture_path)
                         img.building_obj = self
